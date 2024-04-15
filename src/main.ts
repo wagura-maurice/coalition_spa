@@ -1,14 +1,17 @@
-import './assets/main.css'
+// src/main.ts
+import { createApp } from 'vue';
+import App from './App.vue';
+import router from './router';
+import store from './stores';
+import VueDatePicker from '@vuepic/vue-datepicker';
+import '@vuepic/vue-datepicker/dist/main.css'
+import '@fortawesome/fontawesome-free/css/all.css';
+import './assets/styles/tailwind.css';
 
-import { createApp } from 'vue'
-import { createPinia } from 'pinia'
+const app = createApp(App);
 
-import App from './App.vue'
-import router from './router'
+app.use(router);
+app.use(store);
+app.component('VueDatePicker', VueDatePicker);
 
-const app = createApp(App)
-
-app.use(createPinia())
-app.use(router)
-
-app.mount('#app')
+app.mount('#app');
