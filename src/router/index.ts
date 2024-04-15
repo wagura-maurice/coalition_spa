@@ -1,21 +1,42 @@
+// src/router/index.ts
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
-      name: 'home',
-      component: HomeView
+      redirect: '/task/catalog'
     },
     {
-      path: '/about',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import('../views/AboutView.vue')
+      path: '/task/catalog',
+      name: 'task_catalog_list_view',
+      component: () => import('../views/TaskCatalogListView.vue')
+    },
+    {
+      path: '/task/catalog/create',
+      name: 'task_catalog_create_view',
+      component: () => import('../views/TaskCatalogCreateView.vue')
+    },
+    {
+      path: '/task/catalog/:id/edit',
+      name: 'task_catalog_edit_view',
+      component: () => import('../views/TaskCatalogEditView.vue')
+    },
+    {
+      path: '/task/category',
+      name: 'task_category_list_view',
+      component: () => import('../views/TaskCategoryListView.vue')
+    },
+    {
+      path: '/task/category/create',
+      name: 'task_category_create_view',
+      component: () => import('../views/TaskCategoryCreateView.vue')
+    },
+    {
+      path: '/task/category/:id/edit',
+      name: 'task_category_edit_view',
+      component: () => import('../views/TaskCategoryEditView.vue')
     }
   ]
 })
