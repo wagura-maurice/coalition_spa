@@ -29,11 +29,11 @@
         ></i>
       </div>
     </div>
-
+    
     <div v-show="showAdvancedSearch" class="border-t border-gray-200 dark:border-gray-700 pt-4 w-80 mx-auto">
       <!-- Date range picker -->
       <div class="mb-4">
-        <label for="dateRange" class="text-sm font-normal text-gray-500 dark:text-gray-400 block mb-2 md:mb-0">Date range:</label>
+        <label for="created_at_date_range" class="text-sm font-normal text-gray-500 dark:text-gray-400 block mb-2 md:mb-0">Created At Date range:</label>
         <!-- Date range picker component goes here -->
         <div class="flex items-center space-x-2">
           <VueDatePicker v-model="date" :enable-time-picker="false" :range="{ partialRange: false }" />
@@ -54,12 +54,34 @@
       <br>
     </div>
     
+    <div id="alert-border-1" class="flex items-center p-4 mb-4 text-blue-800 border-t-4 border-blue-300 bg-blue-50 dark:text-blue-400 dark:bg-gray-800 dark:border-blue-800" role="alert">
+      <svg class="flex-shrink-0 w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+        <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+      </svg>
+      <div class="ms-3 text-sm font-medium">
+        you have selected 100 out of 200 records
+      </div>
+      <button type="button" class="ms-auto -mx-1.5 -my-1.5 bg-blue-50 text-blue-500 rounded-lg focus:ring-2 focus:ring-blue-400 p-1.5 hover:bg-blue-200 inline-flex items-center justify-center h-8 w-8 dark:bg-gray-800 dark:text-blue-400 dark:hover:bg-gray-700" data-dismiss-target="#alert-border-1" aria-label="Close">
+        <span class="sr-only">Dismiss</span>
+        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+        </svg>
+      </button>
+    </div>
+    
     <table v-if="categories?.data?.length > 0" class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
       <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
         <tr>
           <th scope="col" class="p-4">
             <div class="flex items-center">
-              <input name="checkbox-all-search" id="checkbox-all-search" value="" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+              <input 
+              name="checkbox-all-search" 
+              id="checkbox-all-search" 
+              value="" 
+              type="checkbox" 
+              class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+              @change="selectAllCategories($event.target.checked)"
+              >
               <label for="checkbox-all-search" class="sr-only">checkbox</label>
             </div>
           </th>
@@ -74,13 +96,20 @@
         <tr v-for="category in categories?.data" :key="category.id" class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
           <td class="w-4 p-4">
             <div class="flex items-center">
-              <input :name="'checkbox-' + category.id" :id="'checkbox-' + category.id" :value="category.id" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+              <input 
+              :name="'checkbox-' + category.id" 
+              :id="'checkbox-' + category.id" 
+              :value="category.id" 
+              type="checkbox" 
+              class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+              @change="toggleCategorySelection(category.id, $event.target.checked)"
+              >
               <label :for="'checkbox-' + category.id" class="sr-only">checkbox</label>
             </div>
           </td>
           <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"># {{ category.id }}</td>
-          <td class="px-6 py-4">{{ category.name }}</td>
-          <td class="px-6 py-4">{{ category.description }}</td>
+          <td class="px-6 py-4">{{ category?.name }}</td>
+          <td class="px-6 py-4">{{ category?.description }}</td>
           <td class="px-6 py-4">
             <div class="flex space-x-4">
               <RouterLink :to="{ name: 'task_category_edit_view', params: { id: category.id } }">
@@ -181,10 +210,10 @@ const submitAdvancedSearch = () => {
   // Extract start and end dates from date.value array
   const startDate = date.value[0].toISOString().split('T')[0];
   const endDate = date.value[1].toISOString().split('T')[0];
-
+  
   // Concatenate start and end dates with a backslash separator
   const dateRangeString = startDate + '\\' + endDate;
-
+  
   // Log the date range value as a string
   // console.log("Date Range:", dateRangeString);
   loadCategories({
@@ -199,7 +228,7 @@ const submitAdvancedSearch = () => {
   perPage.value,
   [null]
   );
-
+  
   // You can add further functionality to handle the submission of advanced search here
 };
 
@@ -224,6 +253,46 @@ onMounted(() => {
   const endDate = new Date(new Date().setDate(startDate.getDate() + 7));
   date.value = [startDate, endDate];
 });
+
+// Add a method to handle checkbox-all-search change event
+const selectAllCategories = (checked) => {
+  categories.value.data.forEach((category) => {
+    if (checked) {
+      // console.log('here');
+      // If checkbox-all-search is checked, select all categories
+      selectedCategories.value.add(category.id);
+    } else {
+      // console.log('there');
+      // If checkbox-all-search is unchecked, deselect all categories
+      selectedCategories.value.delete(category.id);
+    }
+  });
+};
+
+// Add a method to handle individual checkbox changes
+const toggleCategorySelection = (categoryId, checked) => {
+  if (checked) {
+    // If checkbox is checked, add category to selectedCategories
+    selectedCategories.value.add(categoryId);
+  } else {
+    // If checkbox is unchecked, remove category from selectedCategories
+    selectedCategories.value.delete(categoryId);
+  }
+
+  // After toggling category selection, show the count of selected records
+  showSelectedCountNotification();
+};
+
+// Update the notification to display the count of selected records
+const showSelectedCountNotification = () => {
+  const totalCount = categories.value.meta.total;
+  const selectedCount = selectedCategories.value.size;
+  const message = `You have selected ${selectedCount} out of ${totalCount} records`;
+  console.log(message);
+};
+
+// Define a reactive set to store selected category IDs
+const selectedCategories = ref(new Set());
 
 // Method to confirm category deletion
 const confirmDelete = (categoryId) => {
@@ -267,7 +336,7 @@ const deleteCategory = async (categoryId) => {
     [null]
     );
   } catch (error) {
-    console.error('Error deleting category:', error);
+    // console.error('Error deleting category:', error);
     // Show toast notification based on the error message
     Toast.fire({
       icon: "error",
