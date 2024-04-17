@@ -71,8 +71,8 @@ const store = createStore<RootState>({
         
         // Construct the URL with filters, pagination options, and included relationships if provided
         if (filters || pageNumber || pageSize || includes) {
-          url += '?';
-          if (filters) url += `${getQueryString(filters)}`;
+          url += '?sort=-_priority&';
+          if (filters) url += `${getQueryString(filters.filter)}`;
           if (pageNumber) url += `&page[number]=${pageNumber}`;
           if (pageSize) url += `&page[size]=${pageSize}`;
           if (includes) url += `&include=${includes.join(',')}`;
