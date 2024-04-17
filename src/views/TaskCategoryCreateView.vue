@@ -1,7 +1,7 @@
 // src/views/TaskCategoryCreateView.vue
 <template>
   <div class="max-w-lg mx-auto mt-8">
-    <h1 class="self-center text-2xl font-bold mb-4 whitespace-nowrap">Enter Details:</h1>
+    <h1 class="self-center text-2xl font-bold mb-4 whitespace-nowrap">Enter Task Category Details:</h1>
     <form @submit.prevent="createCategory">
       <div class="mb-6">
         <label for="name" class="block mb-2 text-lg font-bold font-medium text-gray-900">Category Name *</label>

@@ -1,3 +1,4 @@
+// src/views/TaskCategoryListView.vue
 <template>
   <div class="container mx-auto">
     <div class="flex justify-between items-center mb-4">
