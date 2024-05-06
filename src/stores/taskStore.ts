@@ -1,4 +1,4 @@
-// src/stores/index.ts
+// src/stores/taskStore.ts
 import { createStore } from 'vuex';
 import { getQueryString } from '@/utility/helper';
 import api from '@/api/index';
@@ -32,7 +32,7 @@ export interface RootState {
   catalogs: TaskCatalog[];
 }
 
-const store = createStore<RootState>({
+export const taskStore = createStore<RootState>({
   state: {
     categories: [],
     catalogs: []
@@ -58,10 +58,11 @@ const store = createStore<RootState>({
           if (includes) url += `&include=${includes.join(',')}`;
         }
         
-        const response = await api.get<TaskCatalog[]>(url);
-        commit('setCategories', response.data);
+        const response = await api.get<TaskCategory[]>(url);
+        // commit('setCategories', response.data);
+        return response.data;
       } catch (error) {
-        console.error('Error fetching catalogs:', error);
+        console.error('Error fetching categories:', error);
         throw error;
       }
     },    
@@ -79,15 +80,15 @@ const store = createStore<RootState>({
         }
         
         const response = await api.get<TaskCatalog[]>(url);
-        commit('setCatalogs', response.data);
+        // commit('setCatalogs', response.data);
+        return response.data;
       } catch (error) {
         console.error('Error fetching catalogs:', error);
         throw error;
       }
     }
-    
   },
   modules: {}
 });
 
-export default store;
+export default taskStore;

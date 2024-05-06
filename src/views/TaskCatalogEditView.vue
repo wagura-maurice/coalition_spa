@@ -1,61 +1,67 @@
 src/views/TaskCatalogEditView.vue
 <template>
-    <div class="max-w-lg mx-auto mt-8">
-        <h1 class="self-center text-2xl font-bold mb-4 whitespace-nowrap">Update Task Catalog Details:</h1>
-        <form @submit.prevent="updateCatalog">
-            <!-- Priority Checkboxes Container -->
-            <div class="mb-6">
-                <label class="block mb-2 text-lg font-bold font-medium text-gray-900">Priority *</label>
-                <hr class="mb-2">
-                <br>
-                <div class="grid grid-cols-2 gap-4">
-                    <div v-for="(priority, index) in priorities" :key="index" class="flex items-center">
-                        <input :id="'priority-checkbox-' + priority.value" type="checkbox" :value="priority.value" v-model="catalog._priority" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" @change="handlePriorityChange(priority.value)" :checked="index === catalog._priority">
-                        <label :for="'priority-checkbox-' + priority.value" class="ms-2 text-sm font-bold text-gray-900">{{ priority.label }}</label>
-                    </div>
-                </div>
-                <br>
-                <hr class="mb-2">
+    <div class="container mx-auto w-4/5">
+      <h1 class="text-2xl font-bold mb-4 whitespace-nowrap">Update Task Catalog:</h1>
+      <p class="mt-1 text-sm text-gray-600">Update the details for the task catalog item.</p>
+      
+      <form @submit.prevent="updateCatalog" class="w-full">
+        <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+          <!-- Catalog Name -->
+          <div class="sm:col-span-4">
+            <label for="name" class="block mb-2 text-sm font-bold text-gray-600">Catalog Name <span class="text-red-500">*</span></label>
+            <div class="mt-2">
+              <input v-model="catalog.title" type="text" name="name" id="name" autocomplete="off" class="block w-full rounded-md border-0 py-1.5 text-sm font-bold text-pink-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600" placeholder="Enter task catalog name" required>
             </div>
-            
-            <!-- Category Dropdown -->
-            <div class="mb-6">
-                <label for="category" class="block mb-2 text-lg font-bold font-medium text-gray-900">Category *</label>
-                <select v-model="catalog.category_id" id="category" class="block w-full p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-base focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
-                    <option value="" disabled>Select a category</option>
-                    <option v-for="category in categories" :value="category.id" :key="category.id" :selected="category.id === catalog.category_id">{{ category.name }}</option>
-                </select>
+          </div>
+          
+          <!-- Task Category -->
+          <div class="sm:col-span-2">
+            <label for="category" class="block mb-2 text-sm font-bold text-gray-600">Task Category</label>
+            <div class="mt-2">
+              <select v-model="catalog.category_id" id="category" name="category" class="block w-full rounded-md border-0 py-1.5 text-sm font-bold text-pink-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600">
+                <option v-for="category in categories" :key="category.id" :value="category.id" class="text-sm font-bold text-gray-600" :selected="catalog.category_id === category.id">{{ category.name }}</option>
+              </select>
             </div>
-            
-            <div class="mb-6">
-                <label for="name" class="block mb-2 text-lg font-bold font-medium text-gray-900">Catalog Name *</label>
-                <input v-model="catalog.title" type="text" id="name" class="block w-full p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-base focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter task catalog name" required>
+          </div>
+          
+          <!-- Description -->
+          <div class="col-span-full">
+            <label for="description" class="block mb-2 text-sm font-bold text-gray-600">Description</label>
+            <div class="mt-2">
+              <textarea v-model="catalog.description" id="description" name="description" rows="10" class="block w-full rounded-md border-0 py-1.5 text-sm font-bold text-pink-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600" placeholder="Write your task catalog description here..."></textarea>
             </div>
-            
-            <div class="mb-6">
-                <label for="description" class="block mb-2 text-lg font-bold font-medium text-gray-900">Catalog Description</label>
-                <textarea v-model="catalog.description" id="description" rows="10" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Write your task catalog description here..."></textarea>
+            <p class="mt-3 text-sm text-gray-600">Provide a brief description of the task item.</p>
+          </div>
+          
+          <!-- Priority -->
+          <div class="sm:col-span-3">
+            <label for="priority" class="block mb-2 text-sm font-bold text-gray-600">Priority</label>
+            <div class="mt-2">
+              <select v-model="catalog._priority" id="priority" name="priority" class="block w-full rounded-md border-0 py-1.5 text-sm font-bold text-pink-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600">
+                <option v-for="priority in priorities" :key="priority.value" :value="priority.value" class="text-sm font-bold text-gray-600" :selected="catalog._priority === priority.value">{{ priority.label }}</option>
+              </select>
             </div>
-            
-            <!-- Status Checkboxes Container -->
-            <div class="mb-6">
-                <label class="block mb-2 text-lg font-bold font-medium text-gray-900">Status *</label>
-                <hr class="mb-2">
-                <br>
-                <div class="grid grid-cols-2 gap-4">
-                    <div v-for="(status, index) in statuses" :key="index" class="flex items-center">
-                        <input :id="'status-checkbox-' + status.value" type="checkbox" :value="status.value" v-model="catalog._status" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" @change="handleStatusChange(status.value)" :checked="index === catalog._status">
-                        <label :for="'status-checkbox-' + status.value" class="ms-2 text-sm font-bold text-gray-900">{{ status.label }}</label>
-                    </div>
-                </div>
-                <br>
-                <hr class="mb-2">
+          </div>
+          
+          <!-- Status -->
+          <div class="sm:col-span-3">
+            <label for="status" class="block mb-2 text-sm font-bold text-gray-600">Status</label>
+            <div class="mt-2">
+              <select v-model="catalog._status" id="status" name="status" class="block w-full rounded-md border-0 py-1.5 text-sm font-bold text-pink-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600">
+                <option v-for="status in statuses" :key="status.value" :value="status.value" class="text-sm font-bold text-gray-600" :selected="catalog._status === status.value">{{ status.label }}</option>
+              </select>
             </div>
-            
-            <button type="submit" class="block w-full text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-lg px-6 py-3.5 text-center me-2 mb-2">Submit</button>
-        </form>
+          </div>
+        </div>
+        
+        <!-- Submit Button -->
+        <div class="mt-6 flex">
+          <button type="submit" class="block w-full text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 font-medium rounded-lg px-6 py-3.5">Update Catalog</button>
+        </div>
+      </form>
     </div>
-</template>
+  </template>
+  
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
@@ -63,125 +69,133 @@ import { useRouter } from 'vue-router';
 import Swal from 'sweetalert2';
 import api from '@/api';
 
-// Priority options
-const priorities = [
-{ label: 'Urgent', value: 0 },
-{ label: 'High', value: 1 },
-{ label: 'Medium', value: 2 },
-{ label: 'Low', value: 3 },
-{ label: 'Critical', value: 4 },
-{ label: 'Normal', value: 5 },
-{ label: 'Emergency', value: 6 },
-{ label: 'Deferred', value: 7 },
-{ label: 'Optional', value: 8 },
-{ label: 'Routine', value: 9 }
-];
-
-// Status options
-const statuses = [
-{ label: 'Pending', value: 0 },
-{ label: 'Processing', value: 1 },
-{ label: 'Processed', value: 2 },
-{ label: 'Completed', value: 3 },
-{ label: 'Cancelled', value: 4 }
-];
-
-const Toast = Swal.mixin({
-    toast: true,
-    position: "top-end",
-    showConfirmButton: false,
-    timer: 5000,
-    timerProgressBar: true,
-    didOpen: (toast) => {
-        toast.onmouseenter = Swal.stopTimer;
-        toast.onmouseleave = Swal.resumeTimer;
-    }
-});
-
 const router = useRouter();
-const categories = ref([]);
-const catalogId = ref(null);
-const catalog = ref({
-    category_id: '',
-    title: '',
-    description: '',
-    _priority: null,
-    _status: null
+const Toast = Swal.mixin({
+  toast: true,
+  position: "top-end",
+  showConfirmButton: false,
+  timer: 5000,
+  timerProgressBar: true,
+  didOpen: (toast) => {
+    toast.onmouseenter = Swal.stopTimer;
+    toast.onmouseleave = Swal.resumeTimer;
+  }
 });
 
-const fetchCategories = async () => {
-    try {
-        const response = await api.get(`/task/category`);
-        categories.value = response.data.data;
-    } catch (error) {
-        // console.error('Error fetching categories:', error);
-        Toast.fire({
-            icon: "error",
-            title: "Error fetching categories: " + error 
-        });
-    }
+const catalogId = router.currentRoute.value.params.id;
+const catalog = ref({
+  category_id: '',
+  title: '',
+  description: '',
+  _priority: null,
+  _status: null
+});
+
+const categories = ref([]);
+const priorities = [
+  { label: 'Urgent', value: 0 },
+  { label: 'High', value: 1 },
+  { label: 'Medium', value: 2 },
+  { label: 'Low', value: 3 },
+  { label: 'Critical', value: 4 },
+  { label: 'Normal', value: 5 },
+  { label: 'Emergency', value: 6 },
+  { label: 'Deferred', value: 7 },
+  { label: 'Optional', value: 8 },
+  { label: 'Routine', value: 9 }
+];
+const statuses = [
+  { label: 'Pending', value: 0 },
+  { label: 'Processing', value: 1 },
+  { label: 'Processed', value: 2 },
+  { label: 'Completed', value: 3 },
+  { label: 'Cancelled', value: 4 }
+];
+
+const fetchCatalogDetails = async () => {
+  try {
+    const response = await api.get(`/task/catalog/${catalogId}`);
+    const catalogData = response.data.data;
+    catalog.value = {
+      category_id: catalogData.category_id,
+      title: catalogData.title,
+      description: catalogData.description,
+      _priority: catalogData._priority, // Use _priority from API response
+      _status: catalogData._status // Use _status from API response
+    };
+  } catch (error) {
+    Toast.fire({
+      icon: "error",
+      title: "Error fetching catalog details: " + error 
+    });
+  }
 };
 
-const fetchCatalog = async () => {
-    try {
-        const response = await api.get(`/task/catalog/${catalogId.value}`);
-        catalog.value = response.data.data;
-    } catch (error) {
-        // console.error('Error fetching catalog:', error);
-        Toast.fire({
-            icon: "error",
-            title: "Error fetching catalog: " + error 
-        });
-    }
+const fetchCategories = async () => {
+  try {
+    const response = await api.get(`/task/category`);
+    categories.value = response.data.data;
+  } catch (error) {
+    Toast.fire({
+      icon: "error",
+      title: "Error fetching categories: " + error 
+    });
+  }
 };
 
 const updateCatalog = async () => {
-    try {
-        const catalogId = window.location.pathname.split('/').pop();
-        const response = await api.put(`/task/catalog/${catalogId}`, catalog.value);
-        // Show toast notification based on the server response json object
-        Toast.fire({
-            icon: response?.data?.throwable?.status,
-            title: response?.data?.throwable?.message
-        });
-    } catch (error) {
-        // console.error('Error updating catalog:', error);
-        // Show toast notification based on the error message
-        Toast.fire({
-            icon: "error",
-            title: "Error updating catalog: " + error 
-        });
-    }
-};
-
-const handlePriorityChange = (selectedPriority) => {
-    // Uncheck all other checkboxes when a checkbox is checked
-    priorities.forEach(priority => {
-        if (priority.value !== selectedPriority) {
-            priority.checked = false;
-        }
+  try {
+    const response = await api.put(`/task/catalog/${catalogId}`, catalog.value);
+    // Show toast notification based on the server response json object
+    Toast.fire({
+      icon: response?.data?.throwable?.status,
+      title: response?.data?.throwable?.message
     });
-    catalog.value._priority = selectedPriority;
-};
-
-const handleStatusChange = (selectedStatus) => {
-    // Uncheck all other checkboxes when a checkbox is checked
-    statuses.forEach(status => {
-        if (status.value !== selectedStatus) {
-            status.checked = false;
-        }
+  } catch (error) {
+    Toast.fire({
+      icon: "error",
+      title: "Error updating catalog: " + error 
     });
-    catalog.value._status = selectedStatus;
+  }
 };
 
-// Fetch categories from API when component is mounted
+// Fetch catalog details from API when component is mounted
 onMounted(() => {
-    catalogId.value = router.currentRoute.value.params.id;
-    fetchCategories();
-    fetchCatalog();
+  fetchCatalogDetails();
+  fetchCategories();
 });
 </script>
-
-<style scoped>
-/* Add your custom styles here */
-</style>
+  
+  <style scoped>
+  .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+  }
+  
+  form {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+  }
+  
+  input,
+  textarea,
+  select {
+    width: 100%;
+    padding: 0.75rem;
+    border-radius: 0.375rem;
+    border: 1px solid #CBD5E0;
+  }
+  
+  button {
+    margin-top: 1rem;
+    padding: 0.75rem;
+    background-color: #3B82F6;
+    border-radius: 0.375rem;
+  }
+  </style>
+  

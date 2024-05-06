@@ -68,6 +68,22 @@ export function getPriorityName(priority: number): string {
   }
 }
 
+export function getPriorityColor(priority: number): string {
+  switch (priority) {
+    case 0: return 'bg-red-500'; // Urgent
+    case 1: return 'bg-yellow-500'; // High
+    case 2: return 'bg-green-500'; // Medium
+    case 3: return 'bg-blue-500'; // Low
+    case 4: return 'bg-purple-500'; // Critical
+    case 5: return 'bg-gray-500'; // Normal
+    case 6: return 'bg-yellow-500'; // Emergency
+    case 7: return 'bg-gray-500'; // Deferred
+    case 8: return 'bg-gray-500'; // Optional
+    case 9: return 'bg-gray-500'; // Routine
+    default: return 'bg-gray-500'; // Default color
+  }
+}
+
 export const Status = {
   PENDING: 'Pending',
   PROCESSING: 'Processing',
@@ -87,3 +103,31 @@ export function getStatusName(status: number): string {
   }
 }
 
+export function getStatusColor(status: number): string {
+  switch (status) {
+    case 0: return 'bg-blue-500'; // Pending
+    case 1: return 'bg-yellow-500'; // Processing
+    case 2: return 'bg-green-500'; // Processed
+    case 3: return 'bg-purple-500'; // Completed
+    case 4: return 'bg-red-500'; // Cancelled
+    default: return 'bg-gray-500'; // Default color
+  }
+}
+
+export function truncatedDescription(text: string): string {
+  if (!text) return '';
+
+  const maxLength = 100;
+  if (text.length <= maxLength) return text;
+
+  // Find the index of the last space within the first 100 characters
+  const lastSpaceIndex = text.lastIndexOf(' ', maxLength);
+
+  // If the last space exists and is not the last character, truncate the text
+  if (lastSpaceIndex !== -1 && lastSpaceIndex !== maxLength - 1) {
+    return text.substring(0, lastSpaceIndex) + '...';
+  } else {
+    // If no space found or last space is the last character, truncate at 100 characters
+    return text.substring(0, maxLength) + '...';
+  }
+}

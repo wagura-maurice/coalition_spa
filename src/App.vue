@@ -1,7 +1,7 @@
 // src/App.vue
 <template>
-  <div class="flex flex-col min-h-screen">
-    <nav class="fixed top-0 left-0 right-0 z-10 bg-white border-gray-200 dark:bg-gray-900">
+  <div class="bg-white">
+    <nav class="fixed top-0 left-0 right-0 z-10 border-b border-gray-200 px-2 sm:px-4 py-2.5 rounded dark:border-gray-200 dark:bg-gray-900">
       <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         <a href="/" class="flex items-center space-x-3 rtl:space-x-reverse">
           <img src="@/assets/logo.svg" class="h-8" alt="Coalition Technologies" />
@@ -16,20 +16,21 @@
         <div :class="['w-full', 'md:block', 'md:w-auto', {'hidden': !isNavOpen}]" id="navbar-default">
           <ul class="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
             <li>
-              <RouterLink to="/task/catalog" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">TASK CATALOGS</RouterLink>
+              <RouterLink to="/task/catalog" class="block py-2 px-3 font-extrabold text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent" :class="{ 'text-blue-700': $route.path === '/task/catalog' }" :aria-current="$route.path === '/task/catalog' ? 'page' : null">TASK CATALOGS</RouterLink>
             </li>
             <li>
-              <RouterLink to="/task/category" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">TASK CATEGORIES</RouterLink>
+              <RouterLink to="/task/category" class="block py-2 px-3 font-extrabold text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent" :class="{ 'text-blue-700': $route.path === '/task/category' }" :aria-current="$route.path === '/task/category' ? 'page' : null">TASK CATEGORIES</RouterLink>
             </li>
           </ul>
         </div>
       </div>
     </nav>
-    <div class="container mx-auto mt-20 flex-grow">
+    <!-- Content Area -->
+    <div class="flex-grow max-w-screen-xl mx-auto p-4">
       <RouterView />
     </div>
-    <footer class="bg-white rounded-lg shadow m-4 dark:bg-gray-800">
-      <div class="w-full mx-auto max-w-screen-xl p-4 md:flex md:items-center md:justify-between">
+    <footer class="border-t border-gray-200 px-2 sm:px-4 py-2.5 rounded dark:border-gray-200 dark:bg-gray-900">
+      <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         <span class="text-sm text-gray-500 sm:text-center dark:text-gray-400">© 2023 <a href="/" class="hover:underline">Coalition Technologies™</a>. All Rights Reserved.</span>
         <ul class="flex flex-wrap items-center mt-3 text-sm font-medium text-gray-500 dark:text-gray-400 sm:mt-0">
           <li>
@@ -62,14 +63,10 @@ const toggleNav = () => {
 </script>
 
 <style scoped>
-/* Setthe container to fill remaining vertical space */
-.container {
-  flex-grow: 1;
-  margin-top: 4rem; /* Adjust the margin-top to make space for the fixed navigation bar */
-}
-
-/* Add padding to the body to prevent content from being hidden behind the fixed navigation bar */
-body {
-  padding-top: 4rem; /* Adjust the padding-top to match the height of the fixed navigation bar */
+.flex-grow {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 64px);
+  margin-bottom: auto;
 }
 </style>

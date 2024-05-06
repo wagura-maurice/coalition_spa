@@ -18,11 +18,11 @@ import TaskCategoryList from '@/components/TaskCategories/TaskCategoryList.vue';
 
 export default {
   components: {
-    TaskCategoryList,
-  },
+    TaskCategoryList
+  }
 };
 </script>
 
-<style>
+<style scoped>
 /* Add any custom styles here */
 </style>
